@@ -1,0 +1,665 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>김포대 지원사업 탐색기</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* 레이아웃: 상단 요약 → 좌측 필터 + 우측 목록(표) → 행 클릭 시 우측 상세 창. 일정·절차·자료 탭은 같은 폭 컬럼. */
+:root{
+  --font:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --bg:#f3f5f8; --surface:#ffffff; --ink:#142033; --ink2:#46546a; --mute:#66758b;
+  --line:#dde3ec; --line2:#c5cfdd; --accent:#1c3d6e; --accent-ink:#ffffff; --hl:#eaf0fa; --scrim:rgba(14,22,36,.45);
+  --ok:#0b6e44; --ok-bg:#dcf2e6; --warn:#a24a07; --warn-bg:#fce8d4; --crit:#b42318; --crit-bg:#fde3e0;
+  --info:#1f5fbf; --info-bg:#e5eefb; --neu:#56637a; --neu-bg:#e8ecf2;
+  --gov:#1f5fbf; --gov-bg:#e5eefb; --loc:#0b7466; --loc-bg:#dcf2ee; --fnd:#9a5200; --fnd-bg:#fbebd8;
+  --asc:#6a45bf; --asc-bg:#ede7fa; --biz:#b02458; --biz-bg:#fbe4ed;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d131c; --surface:#151d2a; --ink:#e8eef7; --ink2:#b6c2d4; --mute:#8a99af;
+  --line:#243247; --line2:#34455e; --accent:#8fb6f2; --accent-ink:#0d131c; --hl:#1a2739; --scrim:rgba(0,0,0,.6);
+  --ok:#52d391; --ok-bg:#12352a; --warn:#f2a65a; --warn-bg:#3a2a16; --crit:#ff8a80; --crit-bg:#401d1b;
+  --info:#8db4f5; --info-bg:#182a47; --neu:#a5b2c6; --neu-bg:#222d3d;
+  --gov:#8db4f5; --gov-bg:#182a47; --loc:#4fd1bd; --loc-bg:#12352f; --fnd:#f0a95c; --fnd-bg:#3a2a14;
+  --asc:#b9a2f5; --asc-bg:#2b2347; --biz:#f58bb0; --biz-bg:#401b2c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d131c; --surface:#151d2a; --ink:#e8eef7; --ink2:#b6c2d4; --mute:#8a99af;
+  --line:#243247; --line2:#34455e; --accent:#8fb6f2; --accent-ink:#0d131c; --hl:#1a2739; --scrim:rgba(0,0,0,.6);
+  --ok:#52d391; --ok-bg:#12352a; --warn:#f2a65a; --warn-bg:#3a2a16; --crit:#ff8a80; --crit-bg:#401d1b;
+  --info:#8db4f5; --info-bg:#182a47; --neu:#a5b2c6; --neu-bg:#222d3d;
+  --gov:#8db4f5; --gov-bg:#182a47; --loc:#4fd1bd; --loc-bg:#12352f; --fnd:#f0a95c; --fnd-bg:#3a2a14;
+  --asc:#b9a2f5; --asc-bg:#2b2347; --biz:#f58bb0; --biz-bg:#401b2c; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1240px;margin:0 auto}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* 헤더 */
+.top{padding:28px 0 18px;display:flex;flex-wrap:wrap;gap:12px 32px;align-items:flex-end;justify-content:space-between}
+.top h1{margin:0;font-size:clamp(24px,4.2vw,34px);font-weight:900;letter-spacing:-.03em;line-height:1.2;text-wrap:balance}
+.top .sub{margin:6px 0 0;color:var(--ink2);max-width:62ch}
+.asof{font-size:12px;color:var(--mute);text-align:right}
+.asof b{display:block;color:var(--ink);font-size:13px}
+@media(max-width:700px){.asof{text-align:left}}
+.asof span{display:block}
+.asof .stale{color:var(--crit);font-weight:700;margin-top:2px}
+.asof .stale[hidden]{display:none}
+.loglist{list-style:none;padding:0!important;margin:8px 0}
+.loglist li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.loglist li:last-child{border-bottom:0}
+@media(max-width:520px){.loglist li{grid-template-columns:minmax(0,1fr);gap:2px}}
+
+/* 요약 */
+.sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:18px}
+.sum>div{background:var(--surface);padding:12px 16px}
+.sum .v{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.sum .l{font-size:12px;color:var(--mute)}
+@media(max-width:700px){.sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* 탭 */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line2);margin-bottom:18px;overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px;font-weight:500;color:var(--ink2);white-space:nowrap;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--accent)}
+.pane[hidden]{display:none}
+
+/* 배지 */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;line-height:1;padding:5px 9px;border-radius:999px;white-space:nowrap}
+.badge i{width:7px;height:7px;border-radius:50%;background:currentColor;display:block}
+.b-gov{color:var(--gov);background:var(--gov-bg)} .b-loc{color:var(--loc);background:var(--loc-bg)}
+.b-fnd{color:var(--fnd);background:var(--fnd-bg)} .b-asc{color:var(--asc);background:var(--asc-bg)} .b-biz{color:var(--biz);background:var(--biz-bg)}
+.st{display:inline-block;font-size:12px;font-weight:700;padding:3px 8px;border-radius:5px;white-space:nowrap}
+.st-open{color:var(--ok);background:var(--ok-bg)} .st-soon{color:var(--crit);background:var(--crit-bg)}
+.st-upcoming{color:var(--info);background:var(--info-bg)} .st-closed{color:var(--neu);background:var(--neu-bg);text-decoration:line-through}
+.st-always{color:var(--loc);background:var(--loc-bg)} .st-tbd{color:var(--neu);background:var(--neu-bg)}
+.ver{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2);white-space:nowrap}
+.meter{display:inline-flex;gap:2px}.meter u{width:9px;height:5px;border-radius:1px;background:var(--line2);display:block;text-decoration:none}
+.meter u.on{background:var(--accent)}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:4px;background:var(--neu-bg);color:var(--ink2)}
+
+/* 목록 영역 */
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
+@media(max-width:980px){.layout{grid-template-columns:minmax(0,1fr)}}
+.filters{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}
+@media(max-width:980px){.filters{position:static;max-height:none}}
+.filters h2{font-size:12px;letter-spacing:.06em;color:var(--mute);margin:16px 0 8px;font-weight:700;text-transform:uppercase}
+.filters h2:first-of-type{margin-top:12px}
+.search{width:100%;padding:9px 11px;border:1px solid var(--line2);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:13px;color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+.chip .n{font-family:var(--mono);font-size:11px;opacity:.75;margin-left:4px}
+.reset{margin-top:16px;width:100%;padding:8px;border:1px dashed var(--line2);background:none;border-radius:8px;color:var(--ink2)}
+.fold>summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::after{content:"＋";color:var(--mute)}
+.fold[open]>summary::after{content:"－"}
+@media(min-width:981px){.fold>summary{display:none}}
+
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.bar .count{font-weight:700}
+.bar select{padding:6px 10px;border:1px solid var(--line2);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+.thead,.row{display:grid;gap:14px;align-items:center;grid-template-columns:78px minmax(0,2.6fr) minmax(0,1.5fr) minmax(0,1.2fr) 92px 112px}
+.thead{padding:8px 16px;font-size:12px;color:var(--mute);font-weight:700;border-bottom:1px solid var(--line2)}
+.rows{display:flex;flex-direction:column}
+.row{width:100%;text-align:left;background:var(--surface);border:0;border-bottom:1px solid var(--line);padding:13px 16px}
+.row:hover{background:var(--hl)}
+.rows{border:1px solid var(--line);border-radius:0 0 10px 10px;border-top:0;overflow:hidden}
+.row .nm{font-weight:700;display:block;line-height:1.4}
+.row .og{font-size:12px;color:var(--mute);display:block;margin-top:2px}
+.row .pd{font-size:13px;display:block}
+.row .dd{font-size:12px;display:block;margin-top:3px}
+.row .am{font-size:13px;color:var(--ink2)}
+.row .cn{font-size:13px;font-weight:500}
+.row .cn.yes,.row .cn.req{color:var(--ok);font-weight:700}
+.empty{padding:40px 16px;text-align:center;color:var(--mute);background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px}
+@media(max-width:980px){
+  .thead{display:none}
+  .rows{border-top:1px solid var(--line);border-radius:10px}
+  .row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 14px;padding:14px}
+  .row>.c-area{grid-column:1}
+  .row>.c-name{grid-column:1/-1;order:2}
+  .row>.c-ver{grid-column:2;justify-self:end;order:1}
+  .row>.c-pd,.row>.c-am,.row>.c-cn{order:3}
+  .row>.c-pd{grid-column:1/-1}
+  .row>[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--mute);font-weight:700}
+}
+.mini{font-size:12px;color:var(--mute);margin:10px 2px 0}
+
+/* 상세 창 */
+#scrim{position:fixed;inset:0;background:var(--scrim);z-index:40}
+#drawer{position:fixed;top:0;right:0;bottom:0;width:min(600px,100%);background:var(--surface);z-index:50;overflow:auto;
+  box-shadow:-12px 0 40px rgba(0,0,0,.18);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#drawer .in{padding:20px max(20px,env(safe-area-inset-right,0px)) 40px 22px}
+.dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.dx{border:1px solid var(--line2);background:var(--surface);border-radius:8px;width:36px;height:36px;font-size:18px;line-height:1}
+.dareas{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+#drawer h2{font-size:21px;line-height:1.35;margin:4px 0 4px;letter-spacing:-.02em;text-wrap:balance}
+.org{color:var(--ink2);margin:0 0 14px}
+.areabox{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;margin:0 0 16px;font-size:13px}
+.areabox b{font-size:15px}
+.facts{display:grid;grid-template-columns:110px minmax(0,1fr);border-top:1px solid var(--line)}
+.facts>dt,.facts>dd{padding:11px 0;border-bottom:1px solid var(--line);margin:0}
+.facts>dt{color:var(--mute);font-size:12px;font-weight:700;padding-right:10px;padding-top:13px}
+.facts ul{margin:0;padding-left:18px}
+.facts .sub{color:var(--ink2);font-size:13px;display:block;margin-top:3px}
+.warnbox{margin-top:16px;padding:12px 14px;border-radius:8px;background:var(--warn-bg);color:var(--ink);font-size:13px;border-left:4px solid var(--warn)}
+.tagrow{display:flex;flex-wrap:wrap;gap:6px}
+@media(max-width:520px){.facts{grid-template-columns:minmax(0,1fr)}.facts>dt{border-bottom:0;padding-bottom:0}}
+
+/* 간트 */
+.gantt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px 18px}
+.gaxis{display:grid;grid-template-columns:minmax(150px,300px) minmax(0,1fr);gap:12px;margin-bottom:6px}
+.gaxis .ticks{position:relative;height:22px;border-bottom:1px solid var(--line2)}
+.gaxis .ticks span{position:absolute;top:0;font-size:11px;color:var(--mute);transform:translateX(-50%);font-family:var(--mono);white-space:nowrap}
+.grow{display:grid;grid-template-columns:minmax(150px,300px) minmax(0,1fr);gap:12px;align-items:center;padding:5px 0;border-radius:6px;width:100%;background:none;border:0;text-align:left}
+.grow:hover{background:var(--hl)}
+.grow .lb{font-size:13px;line-height:1.35;display:flex;gap:8px;align-items:center;min-width:0}
+.grow .lb span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gtrack{position:relative;height:18px;background:repeating-linear-gradient(90deg,transparent 0 calc(100%/12 - 1px),var(--line) calc(100%/12 - 1px) calc(100%/12))}
+.gbar{position:absolute;top:3px;height:12px;border-radius:3px;min-width:5px}
+.gdot{position:absolute;top:2px;width:13px;height:13px;transform:translateX(-50%) rotate(45deg);border-radius:2px}
+.gtoday{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--crit);z-index:2}
+.c-gov{background:var(--gov)}.c-loc{background:var(--loc)}.c-fnd{background:var(--fnd)}.c-asc{background:var(--asc)}.c-biz{background:var(--biz)}
+.gleg{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink2);margin:10px 0 0}
+.gleg span{display:inline-flex;align-items:center;gap:6px}
+.gleg i{width:12px;height:8px;border-radius:2px;display:block}
+@media(max-width:700px){
+  .gaxis,.grow{grid-template-columns:minmax(0,1fr);gap:4px}
+  .gaxis>div:first-child{display:none}
+}
+
+/* 본문 블록 */
+.sect{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.sect h2{margin:0 0 10px;font-size:17px;letter-spacing:-.01em}
+.sect h3{margin:16px 0 6px;font-size:14px}
+.sect p{margin:6px 0;max-width:78ch}
+.sect ul,.sect ol{margin:6px 0;padding-left:20px;max-width:78ch}
+.sect li{margin:3px 0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:8px 0}
+.tbl table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{background:var(--hl);font-size:12px;color:var(--ink2)}
+.tbl tr:last-child td{border-bottom:0}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media(max-width:800px){.two{grid-template-columns:minmax(0,1fr)}}
+footer{margin-top:28px;font-size:12px;color:var(--mute);max-width:90ch}
+@media(prefers-reduced-motion:no-preference){#drawer{animation:slide .18s ease-out}@keyframes slide{from{transform:translateX(24px);opacity:.4}}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>김포대학교 산학협력단<br>지원 가능 사업 탐색기</h1>
+      <p class="sub">정부·지자체·재단·협회·기업의 공모 사업을 한곳에 모았습니다. 신청기간, 금액, 지원분야, 컨소시엄 가능 여부를 비교하고, 행을 누르면 상세 정보를 볼 수 있습니다.</p>
+    </div>
+    <div class="asof"><b class="num" id="upd">최종 업데이트 -</b><span id="nxt"></span><span class="stale" id="stale" hidden>자동 업데이트가 지연되고 있습니다. 공고 내용을 직접 확인하세요.</span></div>
+  </header>
+
+  <div class="sum" id="sum"></div>
+
+  <div class="tabs" role="tablist" id="tabs">
+    <button role="tab" id="t-list" aria-selected="true" aria-controls="p-list" data-tab="list">사업 목록</button>
+    <button role="tab" id="t-time" aria-selected="false" aria-controls="p-time" data-tab="time">접수 일정</button>
+    <button role="tab" id="t-how" aria-selected="false" aria-controls="p-how" data-tab="how">신청 절차·입찰 경로</button>
+    <button role="tab" id="t-about" aria-selected="false" aria-controls="p-about" data-tab="about">자료·유의사항</button>
+  </div>
+
+  <!-- 목록 -->
+  <section class="pane" id="p-list" role="tabpanel" aria-labelledby="t-list">
+    <div class="layout">
+      <details class="fold filters" id="filters" open>
+        <summary>검색·필터</summary>
+        <div id="fbody">
+          <h2>검색</h2>
+          <input class="search" id="q" type="search" placeholder="사업명, 기관, 분야 검색" autocomplete="off">
+          <h2>사업 영역</h2><div class="chips" id="f-area"></div>
+          <h2>접수 상태</h2><div class="chips" id="f-status"></div>
+          <h2>컨소시엄</h2><div class="chips" id="f-cons"></div>
+          <h2>지원분야</h2><div class="chips" id="f-field"></div>
+          <h2>확인 수준</h2><div class="chips" id="f-ver"></div>
+          <button class="reset" id="reset" type="button">필터 초기화</button>
+        </div>
+      </details>
+      <div>
+        <div class="bar">
+          <div class="count" id="count" aria-live="polite"></div>
+          <label>정렬 <select id="sort">
+            <option value="due">마감 임박순</option>
+            <option value="fit">참여 가능성 높은 순</option>
+            <option value="name">사업명순</option>
+          </select></label>
+        </div>
+        <div class="thead" aria-hidden="true"><span>영역</span><span>사업명 · 기관</span><span>신청기간</span><span>금액</span><span>컨소시엄</span><span>확인 수준</span></div>
+        <div class="rows" id="rows"></div>
+        <p class="mini">금액은 공고 목록에 표기되지 않은 경우가 많아 대부분 “공고문 확인”으로 표시했습니다. 확인 수준이 낮은 항목은 반드시 최신 공고문으로 다시 확인하세요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 일정 -->
+  <section class="pane" id="p-time" role="tabpanel" aria-labelledby="t-time" hidden>
+    <div class="gantt" id="gantt"></div>
+    <p class="mini">막대는 접수 시작~마감, 마름모는 마감일만 확인된 공고입니다. 붉은 선이 오늘입니다. 막대를 누르면 상세 창이 열립니다. 일정이 확인된 공고만 표시합니다.</p>
+  </section>
+
+  <!-- 절차 -->
+  <section class="pane" id="p-how" role="tabpanel" aria-labelledby="t-how" hidden>
+    <div class="sect">
+      <h2>정부 R&amp;D 과제 신청 절차 (IRIS 안내 기준)</h2>
+      <ol>
+        <li>IRIS 회원가입, 국가연구자번호 발급(NRI에서 연구자 전환), 소속기관 정보 등록. 접수 전 필수이며 미완료 시 접수할 수 없습니다.</li>
+        <li>IRIS 영상 사용설명서 확인. 과제 접수 전 확인을 권장합니다.</li>
+        <li>R&amp;D업무포털 &gt; 과제접수 &gt; 신청공고목록(또는 공고문)에서 신청 자격과 접수 일정 확인.</li>
+        <li>R&amp;D업무포털에서 과제 접수. 연구개발기관 승인 대상 과제는 기관담당자 접수 마감일이 기준이라 연구자 마감보다 빠를 수 있습니다.</li>
+        <li>문의: 고객센터, R&amp;D 신문고, 상담챗봇(평일 09:00~18:00).</li>
+      </ol>
+      <div class="warnbox">연구개발기관 승인 마감이 더 빠릅니다. 산학협력단 담당자와 내부 마감일을 먼저 확인하세요.</div>
+    </div>
+    <div class="sect">
+      <h2>입찰·조달형으로 참여하는 경로</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>경로</th><th>대학 참여 방식</th><th>기본 절차</th><th>준비물·유의사항</th></tr></thead>
+        <tbody>
+          <tr><td><b>나라장터</b> 용역·연구용역 입찰</td><td>산학협력단 명의로 입찰참가자격 등록 후 제안서·가격 입찰</td><td>공고 확인 → 입찰참가자격 등록 → 제안서(또는 입찰서) 제출 → 평가 → 협상·계약</td><td>사업자등록 정보, 전자입찰용 인증서, 참가자격 제한(중소기업 한정 등) 확인</td></tr>
+          <tr><td>정부 R&amp;D 공모 (IRIS·NRF 등)</td><td>주관기관 또는 참여기관으로 신청</td><td>IRIS 회원가입 → 국가연구자번호 → 기관정보 등록 → 공고 확인 → 포털 접수 → 평가 → 협약</td><td>연구개발기관 승인 마감이 연구자 마감보다 빠를 수 있음</td></tr>
+          <tr><td>교육부 대학재정지원사업</td><td>대학 본부가 사업계획서 제출, 선정 후 협약</td><td>사업 공고 → 대학 단위 계획서 작성 → 심사 → 선정·협약 → 연차점검</td><td>기획처·산학협력단 협의 필수. Uniall(대학재정지원사업 통합정보시스템) 사용</td></tr>
+          <tr><td>지자체·공공기관 자체 공모·용역</td><td>지역 대학의 용역·사업 수행기관 선정</td><td>각 기관 누리집 공고 → 제안서 제출 → 선정</td><td>공고별 자격·평가 방식이 다름</td></tr>
+        </tbody></table></div>
+      <p class="mini">출처: 업로드된 엑셀 자료(‘입찰·조달 경로’ 시트는 일반 안내이며 이번 조회에서 사이트로 확인하지 못했다고 표시된 내용).</p>
+    </div>
+    <div class="sect">
+      <h2>문의처</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>기관</th><th>연락처</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>IRIS 고객센터</td><td class="num">042-862-1500 / 1877-2041</td><td>평일 09~18시</td></tr>
+          <tr><td>NRF 전산시스템</td><td class="num">042-869-6114</td><td></td></tr>
+          <tr><td>NRF 연구비 정산</td><td class="num">042-869-7788</td><td></td></tr>
+          <tr><td>교육부 지역대학지원과</td><td class="num">044-203-6249</td><td>지방대육성법 시행령 개정 입법예고 문의처로도 게시됨</td></tr>
+        </tbody></table></div>
+    </div>
+  </section>
+
+  <!-- 자료 -->
+  <section class="pane" id="p-about" role="tabpanel" aria-labelledby="t-about" hidden>
+    <div class="sect">
+      <h2>확인 수준 보는 법</h2>
+      <p>각 사업에는 정보를 얼마나 직접 확인했는지 3단계로 표시했습니다. 색이 아니라 막대 개수와 글자로도 구분됩니다.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>표시</th><th>의미</th><th>이 페이지에서 사용하는 방법</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ver"><span class="meter"><u class="on"></u><u class="on"></u><u class="on"></u></span>공고 확인</span></td><td>2026-11-12 기준 IRIS·NRF·K-Startup 등의 공고 목록에서 제목과 접수기간을 확인한 항목</td><td>접수기간을 신뢰할 수 있음. 신청 자격·금액은 공고문 본문 확인 필요</td></tr>
+          <tr><td><span class="ver"><span class="meter"><u class="on"></u><u class="on"></u><u></u></span>사이트 확인</span></td><td>기관 사이트에서 사업이 진행 중임은 확인했으나 공고 세부(기간·금액)는 확인하지 못한 항목</td><td>사업 존재를 믿을 수 있음. 일정은 기관 공지 확인</td></tr>
+          <tr><td><span class="ver"><span class="meter"><u class="on"></u><u></u><u></u></span>일반 지식</span></td><td>사이트로 확인하지 못하고 일반 지식에 근거해 정리한 항목</td><td>탐색용 참고. 사업 유지 여부, 일정, 자격을 반드시 최신 공고로 확인</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="two">
+      <div class="sect">
+        <h2>사업 영역 구분</h2>
+        <ul>
+          <li><span class="badge b-gov"><i></i>정부</span> 중앙부처 소관 공모와 전문기관(IITP·KEIT·KIAT·NIPA·한국산업인력공단·KISA 등)이 운영하는 사업</li>
+          <li><span class="badge b-loc"><i></i>지자체</span> 경기도·김포시와 그 산하기관의 공모·용역</li>
+          <li><span class="badge b-fnd"><i></i>재단</span> 한국연구재단·한국장학재단·한국사학진흥재단과 민간 공익재단의 사업</li>
+          <li><span class="badge b-asc"><i></i>협회</span> 전문대학교육협의회, 산업·직능 협회가 운영하는 프로그램과 협력 채널</li>
+          <li><span class="badge b-biz"><i></i>기업</span> 기업이 제공하는 교육·장비·플랫폼 제휴와 협약형 산학협력</li>
+        </ul>
+        <p>‘김포대 참여 가능성’은 김포대학교를 경기 김포 소재 전문대학으로 보고 사업 성격만으로 추정한 값입니다. 학교 상황과 다르면 판단이 달라집니다.</p>
+      </div>
+      <div class="sect">
+        <h2>이번 조사에서 확인한 곳</h2>
+        <ul>
+          <li>업로드된 엑셀 ‘대학 참여가능 국가지원사업’(IRIS·NRF 목록, 교육부 게시판 기준)</li>
+          <li>K-Startup 모집중 공고 목록 (2026-11-12 조회)</li>
+          <li>교육부 지역대학육성 게시판</li>
+          <li>한국산업인력공단 교육훈련기관 메뉴, KISA, 네이버 커넥트재단 홈페이지</li>
+          <li>한국콘텐츠진흥원 지원공고: 대학 대상 인재양성 공고는 확인되지 않아 제외</li>
+        </ul>
+        <h3>사이트 정책상 읽지 못한 곳</h3>
+        <p>김포대학교 홈페이지, 기업마당, 중소벤처기업부, 한국과학창의재단, 삼성미래기술육성재단, 경기도경제과학진흥원, 한국전문대학교육협의회, 한국사학진흥재단(이전 안내 화면만 표시), 한국반도체산업협회(대학 대상 공고 미확인). 해당 분야 항목은 ‘일반 지식’으로 표시했습니다.</p>
+      </div>
+    </div>
+    <div class="sect">
+      <h2>함께 알아두면 좋은 제도 동향</h2>
+      <p>교육부가 ‘지방대육성법 시행령 개정’을 입법예고했습니다(엑셀 자료 기준, 직접 참여 사업은 아님). 개정 내용과 의견 제출 기한은 첨부파일에서 확인해야 하며, 문의처는 교육부 지역대학지원과(044-203-6249)입니다. 지역성장 인재양성체계(앵커, 舊 RISE)는 2026-11-12에 1차연도 연차점검과 성과 인센티브 배분 결과가 게시되었습니다.</p>
+      <h3>법률·행정 유의</h3>
+      <p>참가자격 제한, 정부출연금 지원 조건, 기관 부담금(대응자금) 등은 공고별로 다릅니다. 신청 전에 산학협력단과 연구지원부서에서 확인하세요.</p>
+    </div>
+    <div class="sect">
+      <h2>자동 업데이트</h2>
+      <p>예약 작업이 매일 오전 9시와 오후 1시(KST)에 맞춰 공개 공고 목록을 다시 확인하고 이 페이지를 새로 게시합니다. 페이지를 열어 둔 상태라면 새 버전이 자동으로 반영됩니다. D-day와 접수 상태는 열 때마다 오늘 날짜로 다시 계산됩니다.</p>
+      <ul>
+        <li>갱신 대상은 사이트로 읽을 수 있는 공고 목록(예: K-Startup, 교육부 게시판)에 한정됩니다.</li>
+        <li>‘일반 지식’ 항목, 금액, 김포대 참여 가능성은 자동으로 바뀌지 않습니다. 신뢰할 수 없는 값을 채워 넣지 않기 위해서입니다.</li>
+        <li>사이트가 접속을 막으면 그 회차에는 해당 항목을 바꾸지 않고 이력에 사유를 남깁니다.</li>
+        <li>업데이트가 26시간 넘게 멈추면 페이지 위쪽에 지연 경고가 나타납니다.</li>
+      </ul>
+      <h3>업데이트 이력</h3>
+      <ul class="loglist" id="log"></ul>
+    </div>
+    <div class="sect">
+      <h2>바로가기</h2>
+      <div class="tagrow" id="links"></div>
+    </div>
+  </section>
+
+  <footer>이 페이지는 공개 자료와 사용자가 제공한 엑셀을 정리한 탐색용 자료이며, 공식 공고를 대체하지 않습니다. 신청 전에 반드시 각 기관의 최신 공고문과 신청 자격을 확인하세요.</footer>
+</div>
+
+<div id="scrim" hidden></div>
+<aside id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" hidden>
+  <div class="in" id="dbody"></div>
+</aside>
+
+<script>
+(function(){
+"use strict";
+/* ───────── 데이터 ───────── */
+var L={
+  iris:{t:"IRIS 사업공고",u:"https://www.iris.go.kr"},
+  nrf:{t:"한국연구재단 신규사업공모",u:"https://www.nrf.re.kr"},
+  moe:{t:"교육부 지역대학육성 게시판",u:"https://www.moe.go.kr/boardCnts/listRenew.do?boardID=72775&renew=72775&m=0316&s=moe"},
+  ks:{t:"K-Startup 모집중 공고",u:"https://www.k-startup.go.kr/web/contents/bizpbanc-ongoing.do"},
+  hrdc:{t:"한국산업인력공단 · 국가인적자원개발 컨소시엄",u:"https://www.hrdkorea.or.kr/1/1/2/5/1"},
+  hrdr:{t:"한국산업인력공단 · 지역산업 맞춤형 인력양성",u:"https://www.hrdkorea.or.kr/1/1/2/5/2"},
+  hrd:{t:"한국산업인력공단",u:"https://www.hrdkorea.or.kr"},
+  kisa:{t:"KISA 한국인터넷진흥원",u:"https://www.kisa.or.kr"},
+  nc:{t:"네이버 커넥트재단",u:"https://www.connect.or.kr"},
+  g2b:{t:"나라장터",u:"https://www.g2b.go.kr"},
+  kosaf:{t:"한국장학재단",u:"https://www.kosaf.go.kr"},
+  kasfo:{t:"한국사학진흥재단",u:"https://www.kasfo.or.kr"},
+  kcce:{t:"한국전문대학교육협의회",u:"https://www.kcce.or.kr"},
+  kisia:{t:"한국정보보호산업협회",u:"https://www.kisia.or.kr"},
+  gbsa:{t:"경기도경제과학진흥원",u:"https://www.gbsa.or.kr"},
+  kimpo:{t:"김포대학교",u:"https://www.kimpo.ac.kr"},
+  kiat:{t:"한국산업기술진흥원(KIAT)",u:"https://www.kiat.or.kr"},
+  keit:{t:"한국산업기술기획평가원(KEIT)",u:"https://www.keit.re.kr"},
+  nipa:{t:"정보통신산업진흥원(NIPA)",u:"https://www.nipa.kr"},
+  iitp:{t:"정보통신기획평가원(IITP)",u:"https://www.iitp.kr"},
+  sf:{t:"삼성미래기술육성재단",u:"https://www.samsungfuture.org"},
+  cisco:{t:"Cisco Networking Academy",u:"https://www.netacad.com"},
+  aws:{t:"AWS Academy",u:"https://aws.amazon.com/training/awsacademy/"},
+  ms:{t:"Microsoft Learn 교육자 센터",u:"https://learn.microsoft.com/training/educator-center/"}
+};
+var D=[];
+function add(o){o.id=D.length+1;D.push(o)}
+var IRISCHK="IRIS(R&D업무포털)";
+
+/* ── 정부·재단 R&D 공고 (엑셀: IRIS·NRF 목록, 2026-11-12) ── */
+add({n:"2027년도 소재부품장비 양산성능평가지원사업 총괄주관연구개발기관 모집",area:"정부",org:"산업통상부 · 한국산업기술진흥원(KIAT)",fields:["산업기술 R&D","산학협력"],kind:"총괄주관기관 모집",s:"2026-11-09",e:"2026-11-30",amt:"공고문 확인 (목록 미표기)",cons:"tbd",consNote:"총괄주관 모집 공고여서 참여기관 구성 방식은 공고문에서 확인해야 합니다.",fit:"낮음",fitNote:"기관 자격(테스트베드·평가 역량)이 핵심입니다. 대학 보유 시설이 있을 때만 검토합니다.",ver:3,sys:IRISCHK,chk:["총괄주관기관 자격","평가 인프라 요건","기관 부담금"],src:[L.iris,L.kiat]});
+add({n:"2026년 「AX실증밸리조성(R&D)」 사업 신규지원대상 과제 통합 재공고",area:"정부",org:"다부처 · 정보통신산업진흥원(NIPA)",fields:["AI·디지털","산업기술 R&D"],kind:"기업 주관 과제의 컨소시엄 참여기관 / 공동연구기관",s:"2026-11-03",e:"2026-11-16",amt:"공고문 확인 (목록 미표기)",cons:"yes",consNote:"기업 주관 사업에서 대학이 참여기관이 되는 형태로 추정됩니다(엑셀 자료의 추정 값).",fit:"중간",fitNote:"AI·디지털 실증 분야에서 참여기관으로 들어갈 가능성이 있습니다.",ver:3,sys:IRISCHK,chk:["주관기관 자격","컨소시엄 구성","실증 요건"],src:[L.iris,L.nipa]});
+add({n:"2026년 지역거점 AX 혁신 기술개발 사업 신규지원 대상과제 공고 (KHIDI 공고분)",area:"정부",org:"다부처 · 정보통신산업진흥원(NIPA)",fields:["AI·디지털","지역혁신","산업기술 R&D"],kind:"지역 컨소시엄 참여기관",s:"2026-10-30",e:"2026-11-13",amt:"공고문 확인 (목록 미표기)",cons:"yes",consNote:"지역 기반 컨소시엄의 참여기관으로 지역 대학이 연계될 가능성이 있습니다(추정).",fit:"중간",fitNote:"경기 지역 컨소시엄에 참여하는 방식을 검토할 수 있습니다.",ver:3,sys:IRISCHK,chk:["지역 요건","주관기관 유형","참여 인력 제한"],src:[L.iris,L.nipa]});
+add({n:"2026년 지역거점 AX 혁신 기술개발 사업 신규지원 대상과제 공고 (NRF·KEIT 공고분)",area:"정부",org:"다부처 · 정보통신산업진흥원(NIPA)",fields:["AI·디지털","지역혁신","산업기술 R&D"],kind:"지역 컨소시엄 참여기관 (NRF·KEIT 각각 공고)",s:"2026-10-29",e:"2026-11-12",amt:"공고문 확인 (목록 미표기)",cons:"yes",consNote:"위 KHIDI 공고분과 같은 사업이며 NRF·KEIT 공고분입니다(추정).",fit:"중간",fitNote:"오늘이 접수 마감일입니다. 준비된 컨소시엄이 없다면 차기 공고를 노립니다.",ver:3,sys:IRISCHK,chk:["위와 같음"],src:[L.iris,L.nipa]});
+add({n:"2026년도 AI 기반 주파수 간섭분석 및 전파예측기술 개발사업 신규지원 대상과제 공고",area:"정부",org:"과학기술정보통신부 · 정보통신기획평가원(IITP)",fields:["AI·디지털","산업기술 R&D"],kind:"대학 연구실 단독 또는 기업 컨소시엄의 공동연구기관",s:"2026-11-03",e:"2026-11-16",amt:"공고문 확인 (목록 미표기)",cons:"yes",consNote:"컨소시엄 의무 여부는 공고문에서 확인해야 합니다.",fit:"낮음",fitNote:"전파·AI 연구 역량이 필요한 전문 연구 과제입니다.",ver:3,sys:IRISCHK,chk:["주관기관 자격","컨소시엄 의무 여부"],src:[L.iris,L.iitp]});
+add({n:"2026년도 제3차 기계장비산업기술개발사업 신규지원 대상과제 공고",area:"정부",org:"산업통상부 · 한국산업기술기획평가원(KEIT)",fields:["산업기술 R&D","산학협력"],kind:"산학 공동 과제의 공동연구기관",s:"2026-10-29",e:"2026-11-20",amt:"공고문 확인 (목록 미표기)",cons:"yes",consNote:"산학 공동 과제로 대학이 공동연구기관이 될 수 있습니다(추정).",fit:"낮음",fitNote:"기업 한정 여부와 민간부담금을 먼저 확인해야 합니다.",ver:3,sys:IRISCHK,chk:["주관기관 자격(기업 한정 여부)","민간부담금"],src:[L.iris,L.keit]});
+add({n:"2027년도 전문기술인 활용 재난재해 대응기술 현장화 지원사업 신규과제 공모",area:"재단",org:"과학기술정보통신부 · 한국연구재단(NRF)",fields:["재난·안전","산업기술 R&D"],kind:"대학 소속 연구자·전문기술인 참여",s:"2026-11-10",e:"2026-11-27",amt:"공고문 확인 (목록 미표기)",cons:"tbd",consNote:"컨소시엄 요건은 목록에 없어 공고문에서 확인해야 합니다.",fit:"낮음",fitNote:"재난·안전 분야 연구자·전문기술인 요건을 충족하는지에 달려 있습니다.",ver:3,sys:IRISCHK,chk:["신청 자격(전문기술인 요건)","지원 규모"],src:[L.iris,L.nrf]});
+add({n:"2026년 한미 이공분야 학생인력교류 프로그램(NSF IRES) 운영지원사업 신규과제 공모",area:"재단",org:"과학기술정보통신부 · 한국연구재단(NRF)",fields:["국제교류","인재양성"],kind:"대학(연구책임자) 주관 운영지원",s:"2026-10-16",e:"2026-11-17",amt:"공고문 확인 (목록 미표기)",cons:"solo",consNote:"대학 연구책임자가 주관하는 형태로 추정되며 한미 공동 요건이 있습니다.",fit:"낮음",fitNote:"이공 분야 한미 공동연구 기반이 있어야 합니다.",ver:3,sys:IRISCHK,chk:["한미 공동 요건","학생 파견 규모·기간"],src:[L.iris,L.nrf]});
+add({n:"범부처 신속대응 R&D KOFPI 전담 지정 과제",area:"정부",org:"과학기술정보통신부 · 한국임업진흥원(KOFPI)",fields:["산업기술 R&D"],kind:"지정공모",s:"2026-11-09",e:"2026-11-13",amt:"공고문 확인 (목록 미표기)",cons:"tbd",consNote:"지정공모 성격이라 대학 참여 여부가 불명확합니다.",fit:"낮음",fitNote:"지정 대상 기관 조건을 충족해야 합니다.",ver:3,sys:IRISCHK,chk:["지정 대상 기관 조건"],src:[L.iris]});
+add({n:"2026년도 미래개척융합과학기술개발사업(한계돌파 R&D) 신규과제 공모(수정)",area:"재단",org:"과학기술정보통신부 · 한국연구재단(NRF)",fields:["기초연구","산업기술 R&D"],kind:"대학 연구자 참여 가능성",amt:"공고문 확인 (목록 미표기)",cons:"tbd",consNote:"목록에 접수기간이 없어 공고문에서 모두 확인해야 합니다.",fit:"낮음",fitNote:"융합 연구 과제로 연구자 역량이 핵심입니다.",ver:3,sys:IRISCHK,chk:["접수기간","신청 자격","지원 규모"],src:[L.iris,L.nrf]});
+add({n:"2027년도 과학기술정보통신부 기초연구사업 1차 신규과제 공모",area:"재단",org:"과학기술정보통신부 · 한국연구재단(NRF)",fields:["기초연구"],kind:"대학 소속 연구자의 개인·집단 연구 (소속 대학 승인 필요)",s:"2026-11-25",e:"2026-12-07",amt:"세부 유형별 상이 (공고문 확인)",cons:"solo",consNote:"개인·집단 연구 신청입니다. 공동연구 구성은 유형별 공고문을 확인하세요.",fit:"중간",fitNote:"교원 개인 연구자 신청이 가능한 유형이 있는지 확인해야 합니다. 대학 승인 마감이 더 빠릅니다.",ver:3,sys:"NRF 사업공모 / e-R&D 계열 시스템",chk:["유형별 자격(신진·중견·기초연구실 등)","대학 승인 마감"],src:[L.nrf,L.iris]});
+add({n:"2027년 전반기 전문경력인사 초빙활용지원사업 신규과제 공모",area:"재단",org:"한국연구재단(NRF)",fields:["인재양성"],kind:"대학이 전문경력인사를 초빙·활용 (추정)",s:"2026-10-30",e:"2026-11-30",amt:"공고문 확인 (목록 미표기)",cons:"tbd",consNote:"신청 주체(기관/개인)가 목록에 없습니다.",fit:"중간",fitNote:"산업체 경력 인력을 교육에 활용하는 전문대학 모델과 맞을 수 있습니다.",ver:3,sys:"NRF 사업공모",chk:["신청 주체(기관/개인)","초빙 인력 요건"],src:[L.nrf]});
+add({n:"2027년도 「유럽핵입자물리연구소(CERN) 협력사업」 이론물리 공동연구 대학원생 파견 공고",area:"재단",org:"한국연구재단(NRF)",fields:["국제교류","인재양성","학생 프로그램"],kind:"대학원생 개인 파견 (기관 입찰형 아님)",s:"2026-11-09",e:"2026-12-11",amt:"공고문 확인 (목록 미표기)",cons:"na",consNote:"개인 파견 프로그램입니다.",fit:"안내용",fitNote:"해당 학생이 있을 때만 안내합니다. 지도교수·대학 추천이 필요할 수 있습니다.",ver:3,sys:"NRF 사업공모",chk:["신청 자격","추천서 요건"],src:[L.nrf]});
+add({n:"2027년 반도체 글로벌 첨단 팹 연계활용사업 하반기 해외(Imec) 인턴십 연수생 선정 공고 안내",area:"재단",org:"한국연구재단(NRF)",fields:["반도체","인재양성","국제교류","학생 프로그램"],kind:"연수생 개인 선발 (재학생 안내용)",s:"2026-11-02",e:"2026-12-07",amt:"공고문 확인 (목록 미표기)",cons:"na",consNote:"개인 선발 프로그램입니다.",fit:"안내용",fitNote:"반도체 관련 재학생에게 안내하는 용도입니다.",ver:3,sys:"NRF 사업공모",chk:["연수생 자격","선발 기준"],src:[L.nrf]});
+add({n:"2026년도 국제공동연구 신속지원사업 신규과제 공모",area:"재단",org:"한국연구재단(NRF)",fields:["국제교류","기초연구"],kind:"대학 연구자 국제공동연구 (마감, 참고용)",s:"2026-10-29",e:"2026-11-11",amt:"공고문 확인 (목록 미표기)",cons:"tbd",consNote:"이미 마감되어 차기 공모 일정만 확인하면 됩니다.",fit:"낮음",fitNote:"참고용입니다.",ver:3,sys:"NRF 사업공모",chk:["차기 공모 일정"],src:[L.nrf]});
+
+/* ── 연례·정례 사업 (엑셀: 교육부 게시판 확인 + 일반 지식) ── */
+add({n:"지역성장 인재양성체계(앵커, 舊 RISE)",area:"정부",org:"교육부 · 지자체 협력",fields:["지역혁신","재정지원(대학)","인재양성"],kind:"대학이 지자체와 협력해 수행하는 지역 대학 재정지원",period:"운영 중 · 신규 공모는 교육부 게시판 확인",amt:"공고·집행지침 확인 (2026.6. 사업비 집행·관리 지침 게시)",cons:"yes",consNote:"지자체와 협력하는 구조입니다. 2026-11-12에 1차연도 연차점검과 성과 인센티브 배분 결과가 게시되었습니다.",fit:"중간",fitNote:"지역 대학 대상 사업입니다. 경기 지역 참여 구조와 전문대학 세부사업은 대학 기획처에서 확인하세요.",ver:2,sys:"교육부 지역대학육성 게시판, Uniall",chk:["경기도 내 참여 대학·세부사업","전문대학 대상 유형"],src:[L.moe],note:"엑셀 자료에서 RISE가 ‘앵커’로 이름이 바뀐 것으로 보인다고 표기했습니다(지침 문서의 ‘앵커(舊 RISE)’ 표기)."});
+add({n:"초광역 성장엔진 인재육성(ULTRA 앵커)",area:"정부",org:"교육부",fields:["인재양성","지역혁신"],kind:"광역권 성장엔진 분야 대학별 인재양성",period:"선정 대학 사업계획서 공개 (2026-11-12 게시)",amt:"공고 확인",cons:"tbd",consNote:"선정된 대학별 계획서가 공개된 상태입니다.",fit:"낮음",fitNote:"선정 대학 중심입니다. 추가 선정 여부는 별도 공고를 확인하세요.",ver:2,sys:"교육부 지역대학육성 게시판",chk:["추가 선정 공고 여부"],src:[L.moe]});
+add({n:"5극3특 공유대학",area:"정부",org:"교육부",fields:["재정지원(대학)","인재양성","지역혁신"],kind:"권역별 대학 연합 공유대학 운영",period:"운영 중 · 참여대학 확대 공고 여부 확인",amt:"공고 확인",cons:"req",consNote:"권역 주관대학(예: 중부권 충남대·충북대 주관, 제주) 중심의 컨소시엄 구조입니다.",fit:"낮음",fitNote:"권역 구조상 수도권 전문대학의 참여 경로를 먼저 확인해야 합니다.",ver:2,sys:"교육부 지역대학육성 게시판",chk:["참여대학 확대 공고","수도권 해당 여부"],src:[L.moe]});
+add({n:"대학기초연구소 지원사업(G-LAMP)",area:"정부",org:"교육부 · 한국연구재단",fields:["기초연구","재정지원(대학)"],kind:"대학 주관 사업",period:"2026-11-11 제3회 G-LAMP 페스티벌 보도자료 게시",amt:"보도자료 첨부(.hwpx)에서 확인",cons:"solo",consNote:"대학 주관 사업입니다.",fit:"낮음",fitNote:"기초연구소 역량이 필요한 사업입니다.",ver:2,sys:"교육부 사업공고, NRF",chk:["사업 개요·지원 규모(보도자료 첨부)"],src:[L.moe,L.nrf]});
+add({n:"BK21 (두뇌한국21) 계열",area:"재단",org:"교육부 · 한국연구재단",fields:["인재양성","기초연구"],kind:"대학원 교육연구단/사업단 단위 신청",period:"차기 공모 일정은 공고 확인",amt:"공고 확인",cons:"yes",consNote:"사업단 단위 신청이며 공동 구성은 공고문을 확인하세요.",fit:"낮음",fitNote:"대학원 중심 사업이라 전문대학 단독 신청은 어렵습니다.",ver:1,sys:"NRF 신규사업공모",chk:["차기 공모 일정","사업 구조"],src:[L.nrf]});
+add({n:"대학중점연구소 지원",area:"재단",org:"교육부 · 한국연구재단",fields:["기초연구"],kind:"대학 부설 연구소 단위 신청",period:"공고 여부 확인",amt:"공고 확인",cons:"solo",consNote:"연구소 단위 신청입니다.",fit:"낮음",fitNote:"부설 연구소의 연구 실적이 중요합니다.",ver:1,sys:"NRF 신규사업공모",chk:["공고 여부"],src:[L.nrf]});
+add({n:"인문한국(HK+, HK3.0) 등 인문사회 학술연구",area:"재단",org:"교육부 · 한국연구재단",fields:["기초연구"],kind:"대학 부설 연구소 단위",period:"공모 시기별 확인",amt:"공고 확인",cons:"solo",consNote:"연구소 단위 신청입니다.",fit:"낮음",fitNote:"인문사회 집단연구 사업입니다.",ver:2,sys:"NRF 신규사업공모",chk:["공모 시기","신청 단위"],src:[L.nrf]});
+add({n:"대학ICT연구센터(ITRC)",area:"정부",org:"과학기술정보통신부 · IITP",fields:["AI·디지털","산업기술 R&D"],kind:"대학 연구센터 주관",period:"IITP 공고 확인",amt:"공고 확인",cons:"solo",consNote:"연구센터 주관 구조입니다.",fit:"낮음",fitNote:"연구센터 구성 역량이 필요합니다. IITP 사이트는 자동 조회가 막혀 확인하지 못했다고 표기했습니다.",ver:1,sys:"IRIS, IITP 공고",chk:["IITP 최신 공고"],src:[L.iris,L.iitp]});
+add({n:"AI대학원·정보보호 특성화대학원·SW중심대학",area:"정부",org:"과학기술정보통신부 · IITP",fields:["AI·디지털","정보보호·안전","인재양성"],kind:"대학(대학원) 단위 선정·운영",period:"IITP 공고 확인",amt:"공고 확인",cons:"tbd",consNote:"공고별로 컨소시엄 요건이 다릅니다.",fit:"낮음",fitNote:"AI 안전·디지털 안전 분야와 연관성이 높은 트랙입니다. 다만 대학원·4년제 중심이라 단독 신청은 어렵고 연계·참여 방식을 검토합니다.",ver:1,sys:"IRIS, IITP 공고",chk:["최신 공고","전문대학 참여 가능 여부"],src:[L.iris,L.iitp]});
+add({n:"창업중심대학",area:"정부",org:"중소벤처기업부",fields:["창업","재정지원(대학)"],kind:"대학 단위 주관 선정",period:"K-Startup 모집중 공고 확인",amt:"대학 단위 지원(공고 확인)",cons:"tbd",consNote:"컨소시엄 요건은 공고문에서 확인해야 합니다.",fit:"낮음",fitNote:"대학 창업 생태계 조성 사업입니다. 교원·학생 창업 실적이 평가에 반영됩니다. K-Startup 접속 폭주로 직접 확인하지 못했다고 표기했습니다.",ver:1,sys:"K-Startup",chk:["최신 공고","신청 자격"],src:[L.ks]});
+add({n:"산학연 협력 기술개발(Collabo R&D 등)",area:"정부",org:"중소벤처기업부 · 산업통상부",fields:["산업기술 R&D","산학협력"],kind:"공동연구기관 또는 수행기관",period:"IRIS·전문기관 공고 확인",amt:"공고 확인",cons:"yes",consNote:"기업 주관 사업이 많아 대학은 참여기관으로 들어가는 형태가 일반적입니다.",fit:"중간",fitNote:"지역 중소기업과 공동 과제를 구성하면 참여할 수 있습니다.",ver:1,sys:"IRIS, 중기부·산업부 전문기관",chk:["주관기관 자격","민간부담금"],src:[L.iris]});
+
+/* ── 창업·지역 (K-Startup 목록 2026-11-12) ── */
+add({n:"2027년도 초기창업·창업도약 패키지 사업 신규 주관기관 모집 (수정공고)",area:"정부",org:"창업진흥원 (K-Startup)",fields:["창업"],kind:"주관기관 모집",e:"2026-11-23",amt:"목록 미표기 (공고문 확인)",cons:"tbd",consNote:"컨소시엄 가능 여부는 목록에 없습니다.",fit:"중간",fitNote:"신청 가능 기관 유형이 목록에 나오지 않습니다. 대학 창업지원조직이 가능한지 공고문으로 확인하세요.",ver:3,sys:"K-Startup",chk:["신청 가능 기관 유형","주관기관 선정 기준","운영 규모"],src:[L.ks]});
+add({n:"2026년 팁스(TIPS) 창업기업 지원계획 (수정공고)",area:"정부",org:"창업진흥원 (K-Startup)",fields:["창업"],kind:"창업기업 대상 (대학 창업팀·교원창업 안내용)",e:"2026-12-31",amt:"목록 미표기 (공고문 확인)",cons:"na",consNote:"기관 신청이 아니라 창업기업 신청 사업입니다.",fit:"안내용",fitNote:"교원·학생 창업팀에 안내하는 용도입니다.",ver:3,sys:"K-Startup",chk:["운영사 추천 요건","지원 규모"],src:[L.ks]});
+add({n:"2026년 중앙부처 및 지자체 창업지원사업 통합공고",area:"정부",org:"창업진흥원 (K-Startup)",fields:["창업"],kind:"창업지원사업 통합 안내 (정보 포털)",e:"2026-12-31",amt:"사업별 상이",cons:"tbd",consNote:"사업별로 다릅니다.",fit:"안내용",fitNote:"창업 지원 사업을 한 번에 훑어볼 수 있는 통합 공고입니다.",ver:3,sys:"K-Startup",chk:["사업별 신청 자격"],src:[L.ks]});
+add({n:"경기창업혁신공간 서부권 「스담스담」 4회차",area:"지자체",org:"경기도경제과학진흥원(GBSA)",fields:["창업","학생 프로그램","지역혁신"],kind:"창업 교육·네트워킹 참가 프로그램",s:"2026-11-12",e:"2026-11-22",amt:"목록 미표기 (공고문 확인)",cons:"na",consNote:"참가형 프로그램입니다.",fit:"안내용",fitNote:"학생·창업동아리·지역 창업자에게 안내하는 용도입니다.",ver:3,sys:"K-Startup 연계 공고",chk:["참가 대상","운영 장소·일정"],src:[L.ks,L.gbsa]});
+
+/* ── 기관 사이트에서 사업 존재를 확인한 항목 ── */
+add({n:"국가인적자원개발 컨소시엄",area:"정부",org:"고용노동부 · 한국산업인력공단",fields:["인재양성","평생·직업교육","산학협력"],kind:"훈련 컨소시엄 (사업 존재는 사이트에서 확인)",period:"공단 공지사항 확인",amt:"공고 확인",cons:"req",consNote:"사업명 그대로 컨소시엄 구성이 기본 구조로 알려져 있습니다(일반 지식).",fit:"높음",fitNote:"전문대학이 기업·기관과 함께 훈련 컨소시엄에 들어갈 수 있는 사업군입니다.",ver:2,sys:"한국산업인력공단 누리집",chk:["최신 공고","대학 참여 자격","컨소시엄 구성 요건"],src:[L.hrdc,L.hrd]});
+add({n:"지역산업 맞춤형 인력양성 사업",area:"정부",org:"고용노동부 · 한국산업인력공단",fields:["인재양성","지역혁신","평생·직업교육"],kind:"지역 산업 수요 기반 인력양성 (사업 존재는 사이트에서 확인)",period:"공단 공지사항 확인",amt:"공고 확인",cons:"yes",consNote:"지자체·산업계·교육훈련기관의 협업으로 운영되는 사업으로 알려져 있습니다(일반 지식).",fit:"높음",fitNote:"김포·경기 서부 지역 산업 수요와 연계해 검토할 만합니다.",ver:2,sys:"한국산업인력공단 누리집",chk:["참여 지역·산업 분야","훈련기관 자격"],src:[L.hrdr,L.hrd]});
+add({n:"차세대 보안리더 양성 프로그램(BoB)",area:"정부",org:"과학기술정보통신부 · KISA",fields:["정보보호·안전","인재양성","학생 프로그램"],kind:"학생 대상 보안 인재양성 (15기 발대식 보도 확인)",period:"기수별 모집 · KISA 공지 확인",amt:"프로그램 참여형 (지원 내용은 공고 확인)",cons:"na",consNote:"학생 개인 참여형입니다.",fit:"안내용",fitNote:"재학생 참여를 안내·추천하는 용도로 활용합니다. AI·디지털 안전 교육과 연계하기 좋습니다.",ver:2,sys:"KISA 누리집",chk:["모집 시기","지원 자격"],src:[L.kisa]});
+add({n:"화이트햇스쿨",area:"정부",org:"과학기술정보통신부 · KISA",fields:["정보보호·안전","인재양성","학생 프로그램"],kind:"청년 대상 보안 인재양성 (4기 출범 보도 확인)",period:"기수별 모집 · KISA 공지 확인",amt:"프로그램 참여형 (지원 내용은 공고 확인)",cons:"na",consNote:"청년 개인 참여형입니다.",fit:"안내용",fitNote:"보안 분야 진로를 가진 재학생에게 안내합니다.",ver:2,sys:"KISA 누리집",chk:["모집 시기","지원 자격"],src:[L.kisa]});
+add({n:"AI 인재양성 대학 협약 (네이버 커넥트재단)",area:"기업",org:"네이버 커넥트재단",fields:["AI·디지털","인재양성"],kind:"대학과의 AI 인재양성 협약 (공모 아님, 협력 제안형)",period:"수시 · 최근 사례: 2026-11-06 여자대학 3곳, 2026-07-23 AI혁신융합대학사업단",amt:"협약별 상이 (보도자료 미기재)",cons:"tbd",consNote:"협약 구조는 공개되지 않았습니다.",fit:"중간",fitNote:"공모가 아니라 협약 사례입니다. 협력 제안의 선례로 참고하세요. 선정 기준은 공개되지 않았습니다.",ver:2,sys:"재단 사업 메뉴(connect.or.kr/programs)",chk:["협력 제안 창구","교육과정 연계 방식"],src:[L.nc]});
+
+/* ── 일반 지식 기반 (사이트로 확인하지 못함) ── */
+add({n:"산학연협력 선도대학 육성사업(LINC 3.0) 및 후속 사업",area:"정부",org:"교육부 · 한국연구재단",fields:["산학협력","인재양성","지역혁신"],kind:"대학 단위 선정 (산학협력 체계 구축)",period:"후속 사업 개편 여부와 일정은 공고 확인",amt:"선정 대학별 재정지원 (규모는 공고 확인)",cons:"yes",consNote:"산업체·지자체와의 협력 체계가 평가 요소인 경우가 많습니다(일반 지식).",fit:"중간",fitNote:"전문대학 대상 유형 운영 여부와 후속 개편을 공고로 확인해야 합니다.",ver:1,sys:"NRF·교육부 공고",chk:["후속 사업 공고 여부","전문대학 유형 신청 자격","대응자금"],src:[L.nrf,L.moe]});
+add({n:"글로컬대학30 사업",area:"정부",org:"교육부",fields:["재정지원(대학)","지역혁신"],kind:"대학 단위 혁신 모델 공모",period:"연도별 공고 확인",amt:"선정 시 대규모 재정지원 (규모·기간은 공고 확인)",cons:"yes",consNote:"지자체·산업계와 연합한 혁신 모델이 평가 대상입니다(일반 지식).",fit:"낮음",fitNote:"대학 전체 혁신 기획 사업으로 경쟁이 치열합니다.",ver:1,sys:"교육부 공고",chk:["신청 자격","지자체 협약 요건"],src:[L.moe]});
+add({n:"전문대학 평생직업교육 체제 지원 (LiFE 2.0 계열)",area:"정부",org:"교육부",fields:["평생·직업교육","재정지원(대학)"],kind:"전문대학 대상 대학 단위 지원",period:"2026년 지속·개편 여부와 일정은 교육부 공고 확인",amt:"공고 확인",cons:"tbd",consNote:"컨소시엄 요건은 연도별 공고를 확인하세요.",fit:"높음",fitNote:"전문대학을 대상으로 한 사업군으로 알려져 있어 우선 검토할 만합니다.",ver:1,sys:"교육부 공고",chk:["2026·2027년 공고 여부","신청 자격"],src:[L.moe]});
+add({n:"고등직업교육 거점지구(HiVE) 지원사업",area:"정부",org:"교육부",fields:["인재양성","산학협력","지역혁신"],kind:"전문대학 중심 지역 거점 컨소시엄",period:"연도별 공고 확인",amt:"공고 확인",cons:"req",consNote:"지역 전문대학·기업·지자체 컨소시엄 구성이 사업 구조의 중심으로 알려져 있습니다(일반 지식).",fit:"중간",fitNote:"지역 거점 지구에 참여하는 방식인지, 신규 선정 공고가 있는지 확인이 필요합니다.",ver:1,sys:"교육부 공고",chk:["신규 선정 공고","지구 구성 요건"],src:[L.moe]});
+add({n:"산업혁신인재성장지원사업",area:"정부",org:"산업통상부 · 한국산업기술진흥원(KIAT)",fields:["인재양성","산학협력"],kind:"산업 수요 기반 인력양성 (대학 컨소시엄형)",period:"KIAT 공고 확인",amt:"공고 확인",cons:"yes",consNote:"기업·대학 컨소시엄으로 구성하는 경우가 일반적입니다(일반 지식).",fit:"중간",fitNote:"지역 기업과 수요 기반 교육과정을 만들 때 연계할 수 있습니다.",ver:1,sys:"IRIS, KIAT 공고",chk:["최신 공고","대학 유형별 참여 자격"],src:[L.kiat,L.iris]});
+add({n:"일학습병행 공동훈련센터",area:"정부",org:"고용노동부 · 한국산업인력공단",fields:["평생·직업교육","산학협력"],kind:"대학 부설 공동훈련센터 운영 (기업 연계)",period:"지정 신청 시기는 공단 공지 확인",amt:"훈련비 지원 등 (기준은 공고 확인)",cons:"yes",consNote:"기업과 연계해 학습근로자를 훈련하는 구조입니다(일반 지식).",fit:"높음",fitNote:"전문대학이 지역 기업과 연계하기 좋은 사업입니다.",ver:1,sys:"한국산업인력공단",chk:["지정 요건","운영 규모와 비용 기준"],src:[L.hrd]});
+add({n:"K-디지털 트레이닝(KDT) 훈련기관",area:"정부",org:"고용노동부 · 한국산업인력공단",fields:["AI·디지털","인재양성"],kind:"디지털 분야 훈련기관 선정",period:"공단 공지 확인",amt:"훈련비 지원 (기준은 공고 확인)",cons:"tbd",consNote:"컨소시엄 요건은 공고별로 다릅니다.",fit:"중간",fitNote:"AI·디지털 교육과정을 외부 훈련사업으로 확장할 때 검토합니다.",ver:1,sys:"한국산업인력공단, HRD-Net",chk:["훈련기관 자격","과정 유형"],src:[L.hrd]});
+add({n:"경기도·김포시 공모·용역 (경기도경제과학진흥원·경기테크노파크·김포시 등)",area:"지자체",org:"경기도 · 김포시 및 산하기관",fields:["지역혁신","창업","인재양성"],kind:"지자체·산하기관 공모, 용역 수행기관 선정",period:"기관별 누리집 공고 · 수시 확인",amt:"공고별 상이",cons:"tbd",consNote:"공고별로 컨소시엄 요건이 다릅니다.",fit:"높음",fitNote:"지역 소재 대학으로서 지자체 협력 사업과 연계하기 좋습니다. 경기도경제과학진흥원 사이트는 이번에 읽지 못했습니다.",ver:1,sys:"각 기관 누리집, 나라장터",chk:["김포시·경기도 최신 공고","수행기관 자격"],src:[L.gbsa,L.g2b]});
+add({n:"국가장학금 Ⅱ유형 등 대학 단위 연계 사업",area:"재단",org:"한국장학재단",fields:["재정지원(대학)","학생 프로그램"],kind:"대학 자체노력·참여 협약",period:"연도별 안내 확인",amt:"공고 확인",cons:"solo",consNote:"대학 단위 참여입니다.",fit:"높음",fitNote:"전문대학도 대상이 되는 학생 지원 사업입니다. 요건은 연도별 공지를 확인하세요.",ver:1,sys:"한국장학재단",chk:["연도별 참여 요건"],src:[L.kosaf]});
+add({n:"사학진흥기금 융자 등 대학 지원",area:"재단",org:"한국사학진흥재단",fields:["재정지원(대학)"],kind:"사립대학 대상 융자·지원",period:"연도별 공고 확인",amt:"공고 확인",cons:"na",consNote:"기관 단위 융자·지원입니다.",fit:"중간",fitNote:"사립 전문대학이면 대상이 될 수 있습니다. 사이트가 이전 안내 화면만 보여 이번에 내용을 확인하지 못했습니다.",ver:1,sys:"한국사학진흥재단",chk:["융자 조건","대상 자격"],src:[L.kasfo]});
+add({n:"삼성미래기술육성사업 연구과제 공모",area:"재단",org:"삼성미래기술육성재단",fields:["기초연구","반도체"],kind:"연구자 개인 공모",period:"재단 공고 확인",amt:"공고 확인",cons:"na",consNote:"연구자 개인 단위 공모입니다.",fit:"낮음",fitNote:"사이트 접근이 제한되어 확인하지 못했습니다. 연구 분야와 자격은 재단 공고를 확인하세요.",ver:1,sys:"삼성미래기술육성재단",chk:["공모 분야","신청 자격"],src:[L.sf]});
+add({n:"Cisco Networking Academy 가입 (사이버보안·네트워킹 과정)",area:"기업",org:"Cisco",fields:["정보보호·안전","AI·디지털","인재양성"],kind:"교육기관 제휴 (교육과정·강사 연수·학습 플랫폼)",period:"상시 신청",always:true,amt:"교육 콘텐츠·플랫폼 제공형 (비용·조건은 가입 시 확인)",cons:"solo",consNote:"교육기관 단위 가입입니다.",fit:"높음",fitNote:"사이버보안·네트워킹 과정이 있어 정보보호·디지털 안전 교육과정과 연계하기 좋습니다. 최신 과정 구성은 가입 후 확인하세요.",ver:1,sys:"netacad.com",chk:["가입 자격","제공 과정 목록","강사 인증 요건"],src:[L.cisco]});
+add({n:"AWS Academy 가입 (클라우드 교육과정)",area:"기업",org:"Amazon Web Services",fields:["AI·디지털","인재양성"],kind:"교육기관 제휴 (클라우드 교육과정·강사 연수)",period:"상시 신청",always:true,amt:"교육과정 제공형 (비용·조건은 가입 시 확인)",cons:"solo",consNote:"교육기관 단위 가입입니다.",fit:"높음",fitNote:"클라우드·AI 교육과정을 외부 커리큘럼으로 도입할 때 활용합니다.",ver:1,sys:"AWS Academy",chk:["가입 자격","제공 과정"],src:[L.aws]});
+add({n:"Microsoft Learn 교육자 프로그램",area:"기업",org:"Microsoft",fields:["AI·디지털","인재양성"],kind:"교수자용 교육 자료·인증 제공",period:"상시",always:true,amt:"자료 제공형 (조건 확인)",cons:"solo",consNote:"교수자·교육기관 단위입니다.",fit:"중간",fitNote:"AI·클라우드 수업 자료와 인증 연계에 활용합니다.",ver:1,sys:"Microsoft Learn 교육자 센터",chk:["교육자 등록 요건","제공 자료 범위"],src:[L.ms]});
+add({n:"기업 연계 계약학과·맞춤형 교육과정",area:"기업",org:"지역 기업·대기업 (협약 체결)",fields:["인재양성","산학협력"],kind:"기업과 협약해 교육과정 운영 (채용 연계형 포함)",period:"수시 협약",always:true,amt:"협약 조건별 상이 (기업 지원금·정부 연계 여부 확인)",cons:"yes",consNote:"기업과 공동 설계하는 구조가 기본입니다.",fit:"높음",fitNote:"전문대학 산학협력의 대표 모델입니다. 지원 조건은 협약 상대와 연도별로 다릅니다.",ver:1,sys:"산학협력단 직접 협의",chk:["기업 부담 범위","채용 연계 조건","정부 지원 연계 여부"],src:[L.kimpo]});
+add({n:"전문대학 협의체 공동사업·연수·평가 공지",area:"협회",org:"한국전문대학교육협의회",fields:["재정지원(대학)","인재양성"],kind:"전문대학 협의체 사업·공지 (개별 공모로 단정할 수 없음)",period:"협의회 공지 확인",amt:"공고 확인",cons:"yes",consNote:"전문대학 공동 수행 사업이 있을 수 있습니다.",fit:"높음",fitNote:"전문대학 협의체여서 정보 수집 채널로 유용합니다. 사이트는 이번에 읽지 못했습니다.",ver:1,sys:"한국전문대학교육협의회 누리집",chk:["최신 공지","참여 대학 요건"],src:[L.kcce]});
+add({n:"정보보호 분야 협회 산학 연계 프로그램 (한국정보보호산업협회 등)",area:"협회",org:"한국정보보호산업협회 등",fields:["정보보호·안전","인재양성"],kind:"협회 주관 교육·인증·산학 연계 (공모 일정은 협회 공지)",period:"협회 공지 확인",amt:"공고 확인",cons:"tbd",consNote:"프로그램별로 다릅니다.",fit:"중간",fitNote:"AI·디지털 안전 분야 협력 채널로 접촉해 볼 만합니다. 구체 프로그램은 이번에 확인하지 못했습니다.",ver:1,sys:"협회 누리집",chk:["진행 중인 프로그램","대학 참여 방식"],src:[L.kisia]});
+
+/* AUTO-UPDATE-META: 예약 작업이 갱신할 때마다 updatedAt을 현재 시각(KST, ISO)으로 바꾸고 LOG 맨 위에 한 줄을 추가합니다. */
+var META={updatedAt:"2026-11-12T21:15:00+09:00"};
+var LOG=[
+  {t:"2026-11-12 21:15",m:"최초 작성: 업로드된 엑셀(IRIS·NRF·교육부 게시판 기준)과 K-Startup·교육부 게시판·한국산업인력공단·KISA·네이버 커넥트재단 사이트 확인 내용을 반영했습니다."}
+];
+
+/* ───────── 상수·유틸 ───────── */
+var AREAS=[{k:"정부",c:"gov"},{k:"지자체",c:"loc"},{k:"재단",c:"fnd"},{k:"협회",c:"asc"},{k:"기업",c:"biz"}];
+var ACLS={};AREAS.forEach(function(a){ACLS[a.k]=a.c});
+var CONS={yes:"가능",req:"컨소시엄형",solo:"단독 위주",na:"해당 없음",tbd:"공고 확인"};
+var VER={3:"공고 확인",2:"사이트 확인",1:"일반 지식"};
+var FITRANK={"높음":0,"중간":1,"안내용":2,"낮음":3};
+var STATUS=[["open","접수중"],["soon","마감임박"],["upcoming","접수예정"],["always","상시·연중"],["tbd","일정 확인"],["closed","마감"]];
+var DAY=864e5;
+function ts(s){var a=s.split("-").map(Number);return Date.UTC(a[0],a[1]-1,a[2])}
+var now=new Date(Date.now()+9*36e5), TODAY=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate());
+function dot(t){var d=new Date(t);return d.getUTCFullYear()+"."+String(d.getUTCMonth()+1).padStart(2,"0")+"."+String(d.getUTCDate()).padStart(2,"0")}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function status(p){
+  var s=p.s?ts(p.s):null,e=p.e?ts(p.e):null;
+  if(e!==null){
+    if(TODAY>e)return{k:"closed",l:"마감",rank:4,sort:e};
+    if(s!==null&&TODAY<s){var ds=Math.round((s-TODAY)/DAY);return{k:"upcoming",l:"접수예정",rank:1,sort:s,dd:"시작 D-"+ds}}
+    var left=Math.round((e-TODAY)/DAY);
+    return{k:left<=7?"soon":"open",l:left<=7?"마감임박":"접수중",rank:0,sort:e,dd:left===0?"D-DAY":"D-"+left}
+  }
+  if(p.always)return{k:"always",l:"상시·연중",rank:2,sort:0};
+  return{k:"tbd",l:"일정 확인",rank:3,sort:0}
+}
+function periodText(p){
+  if(p.s&&p.e)return dot(ts(p.s))+" ~ "+dot(ts(p.e));
+  if(p.e)return "~ "+dot(ts(p.e))+" (시작일 미표기)";
+  return p.period||"공고 확인";
+}
+D.forEach(function(p){p.st=status(p)});
+var AREANUM={};AREAS.forEach(function(a){AREANUM[a.k]=D.filter(function(p){return p.area===a.k}).length});
+function badge(a){return '<span class="badge b-'+ACLS[a]+'"><i></i>'+esc(a)+'</span>'}
+function meter(v){return '<span class="meter" aria-hidden="true">'+[1,2,3].map(function(i){return '<u class="'+(i<=v?"on":"")+'"></u>'}).join("")+'</span>'}
+function verHtml(v){return '<span class="ver">'+meter(v)+VER[v]+'</span>'}
+function stHtml(p){return '<span class="st st-'+p.st.k+'">'+p.st.l+'</span>'}
+
+/* ───────── 업데이트 표시 ───────── */
+(function(){
+  function p2(n){return String(n).padStart(2,"0")}
+  var up=new Date(META.updatedAt),k=new Date(up.getTime()+9*36e5);
+  document.getElementById("upd").textContent="최종 업데이트 "+k.getUTCFullYear()+"."+p2(k.getUTCMonth()+1)+"."+p2(k.getUTCDate())+" "+p2(k.getUTCHours())+":"+p2(k.getUTCMinutes())+" KST";
+  var n=new Date(Date.now()+9*36e5),mins=n.getUTCHours()*60+n.getUTCMinutes();
+  var next=mins<540?"오늘 09:00":mins<780?"오늘 13:00":"내일 09:00";
+  document.getElementById("nxt").textContent="자동 업데이트 매일 09:00·13:00 · 다음 "+next;
+  if(Date.now()-up.getTime()>26*36e5)document.getElementById("stale").hidden=false;
+  document.getElementById("log").innerHTML=LOG.slice(0,30).map(function(l){return '<li><span class="num">'+esc(l.t)+'</span><span>'+esc(l.m)+'</span></li>'}).join("");
+})();
+
+/* ───────── 요약 ───────── */
+(function(){
+  var open=D.filter(function(p){return p.st.k==="open"||p.st.k==="soon"}).length;
+  var soon=D.filter(function(p){return p.st.k==="soon"}).length;
+  var cons=D.filter(function(p){return p.cons==="yes"||p.cons==="req"}).length;
+  var cells=[[D.length,"수집한 사업 (건)"],[open,"지금 접수 중 (건)"],[soon,"7일 안에 마감 (건)"],[cons,"컨소시엄 가능·형 (건)"]];
+  document.getElementById("sum").innerHTML=cells.map(function(c){return '<div><div class="v num">'+c[0]+'</div><div class="l">'+c[1]+'</div></div>'}).join("");
+})();
+
+/* ───────── 필터 ───────── */
+var F={area:{},status:{},cons:{},field:{},ver:{},q:""};
+var fieldSet={};D.forEach(function(p){p.fields.forEach(function(f){fieldSet[f]=(fieldSet[f]||0)+1})});
+var FIELDS=Object.keys(fieldSet).sort(function(a,b){return fieldSet[b]-fieldSet[a]||a.localeCompare(b,"ko")});
+function chipGroup(id,items,key){
+  var el=document.getElementById(id);
+  el.innerHTML=items.map(function(it){return '<button type="button" class="chip" aria-pressed="false" data-g="'+key+'" data-v="'+esc(it[0])+'">'+esc(it[1])+(it[2]!=null?'<span class="n">'+it[2]+'</span>':'')+'</button>'}).join("");
+}
+chipGroup("f-area",AREAS.map(function(a){return[a.k,a.k,AREANUM[a.k]]}),"area");
+chipGroup("f-status",STATUS.map(function(s){return[s[0],s[1]]}),"status");
+chipGroup("f-cons",Object.keys(CONS).map(function(k){return[k,CONS[k]]}),"cons");
+chipGroup("f-field",FIELDS.map(function(f){return[f,f,fieldSet[f]]}),"field");
+chipGroup("f-ver",[["3","공고 확인"],["2","사이트 확인"],["1","일반 지식"]],"ver");
+document.getElementById("filters").addEventListener("click",function(ev){
+  var b=ev.target.closest(".chip");if(!b)return;
+  var g=b.dataset.g,v=b.dataset.v,on=b.getAttribute("aria-pressed")!=="true";
+  b.setAttribute("aria-pressed",on?"true":"false");
+  if(on)F[g][v]=1;else delete F[g][v];
+  render();
+});
+document.getElementById("q").addEventListener("input",function(e){F.q=e.target.value.trim().toLowerCase();render()});
+document.getElementById("reset").addEventListener("click",function(){
+  F={area:{},status:{},cons:{},field:{},ver:{},q:""};
+  document.getElementById("q").value="";
+  document.querySelectorAll(".chip").forEach(function(c){c.setAttribute("aria-pressed","false")});
+  render();
+});
+document.getElementById("sort").addEventListener("change",render);
+function anyOf(group,val){var k=Object.keys(F[group]);return!k.length||k.indexOf(String(val))>-1}
+function match(p){
+  if(!anyOf("area",p.area)||!anyOf("status",p.st.k)||!anyOf("cons",p.cons)||!anyOf("ver",p.ver))return false;
+  var fk=Object.keys(F.field);
+  if(fk.length&&!p.fields.some(function(f){return fk.indexOf(f)>-1}))return false;
+  if(F.q){var hay=(p.n+" "+p.org+" "+p.fields.join(" ")+" "+p.kind+" "+p.area+" "+(p.note||"")).toLowerCase();if(hay.indexOf(F.q)<0)return false}
+  return true;
+}
+function cmp(mode){
+  return function(a,b){
+    if(mode==="name")return a.n.localeCompare(b.n,"ko");
+    if(mode==="fit"){var d=FITRANK[a.fit]-FITRANK[b.fit];if(d)return d}
+    if(a.st.rank!==b.st.rank)return a.st.rank-b.st.rank;
+    if(a.st.rank<=1&&a.st.sort!==b.st.sort)return a.st.sort-b.st.sort;
+    return a.id-b.id;
+  }
+}
+function render(){
+  var mode=document.getElementById("sort").value;
+  var list=D.filter(match).sort(cmp(mode));
+  document.getElementById("count").textContent=list.length+"건 표시 (전체 "+D.length+"건)";
+  var rows=document.getElementById("rows");
+  if(!list.length){rows.innerHTML='<div class="empty">조건에 맞는 사업이 없습니다. 필터를 줄여 보세요.</div>';return}
+  rows.innerHTML=list.map(function(p){
+    return '<button type="button" class="row" data-id="'+p.id+'">'+
+      '<span class="c-area">'+badge(p.area)+'</span>'+
+      '<span class="c-name"><span class="nm">'+esc(p.n)+'</span><span class="og">'+esc(p.org)+' · '+esc(p.fields.slice(0,3).join(", "))+'</span></span>'+
+      '<span class="c-pd" data-l="신청기간"><span class="pd num">'+esc(periodText(p))+'</span><span class="dd">'+stHtml(p)+(p.st.dd?' <span class="num">'+p.st.dd+'</span>':'')+'</span></span>'+
+      '<span class="c-am am" data-l="금액">'+esc(p.amt)+'</span>'+
+      '<span class="c-cn cn '+p.cons+'" data-l="컨소시엄">'+CONS[p.cons]+'</span>'+
+      '<span class="c-ver" data-l="확인 수준">'+verHtml(p.ver)+'</span></button>';
+  }).join("");
+}
+render();
+document.getElementById("rows").addEventListener("click",function(ev){
+  var r=ev.target.closest(".row");if(r)openDetail(+r.dataset.id,r);
+});
+
+/* ───────── 상세 창 ───────── */
+var drawer=document.getElementById("drawer"),scrim=document.getElementById("scrim"),lastFocus=null;
+function openDetail(id,from){
+  var p=D.filter(function(x){return x.id===id})[0];if(!p)return;
+  lastFocus=from||document.activeElement;
+  var c=ACLS[p.area];
+  var html='<div class="dhead"><div class="dareas">'+badge(p.area)+stHtml(p)+(p.st.dd?'<span class="num">'+p.st.dd+'</span>':'')+'</div>'+
+    '<button type="button" class="dx" id="dclose" aria-label="상세 창 닫기">×</button></div>'+
+    '<h2 id="dTitle">'+esc(p.n)+'</h2><p class="org">'+esc(p.org)+'</p>'+
+    '<div class="areabox" style="background:var(--'+c+'-bg);color:var(--'+c+')"><span>사업 영역</span><b>'+esc(p.area)+'</b><span style="color:var(--ink2)">'+areaNote(p.area)+'</span></div>'+
+    '<dl class="facts">'+
+    '<dt>신청기간</dt><dd><b class="num">'+esc(periodText(p))+'</b>'+(p.st.dd?'<span class="sub">'+p.st.l+' · '+p.st.dd+'</span>':'<span class="sub">'+p.st.l+'</span>')+'</dd>'+
+    '<dt>금액</dt><dd>'+esc(p.amt)+'</dd>'+
+    '<dt>지원분야</dt><dd><div class="tagrow">'+p.fields.map(function(f){return '<span class="tag">'+esc(f)+'</span>'}).join("")+'</div></dd>'+
+    '<dt>컨소시엄</dt><dd><b>'+CONS[p.cons]+'</b><span class="sub">'+esc(p.consNote)+'</span></dd>'+
+    '<dt>참여 형태</dt><dd>'+esc(p.kind)+'</dd>'+
+    '<dt>김포대 참여 가능성</dt><dd><b>'+esc(p.fit)+'</b> (추정)<span class="sub">'+esc(p.fitNote)+'</span></dd>'+
+    '<dt>신청 경로</dt><dd>'+esc(p.sys)+'</dd>'+
+    '<dt>공고문에서 확인할 사항</dt><dd><ul>'+p.chk.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul></dd>'+
+    '<dt>확인 수준</dt><dd>'+verHtml(p.ver)+'<span class="sub">'+verNote(p.ver)+'</span></dd>'+
+    (p.note?'<dt>비고</dt><dd>'+esc(p.note)+'</dd>':'')+
+    '<dt>출처·바로가기</dt><dd><ul>'+p.src.map(function(s){return '<li><a href="'+esc(s.u)+'" target="_blank" rel="noopener noreferrer">'+esc(s.t)+'</a></li>'}).join("")+'</ul></dd>'+
+    '</dl>'+
+    (p.ver<3?'<div class="warnbox">이 항목은 접수기간이나 자격을 공고문으로 직접 확인하지 못했습니다. 신청 전에 반드시 최신 공고를 확인하세요.</div>':'<div class="warnbox">접수기간은 사이트 목록 기준이며 실제 접수 가능일과 다를 수 있습니다. 연구개발기관 승인 대상 과제는 기관담당자 접수 마감이 더 빠릅니다.</div>');
+  document.getElementById("dbody").innerHTML=html;
+  scrim.hidden=false;drawer.hidden=false;drawer.scrollTop=0;
+  document.getElementById("dclose").focus();
+}
+function areaNote(a){return{"정부":"중앙부처 소관 공모·전문기관 운영","지자체":"경기도·김포시 및 산하기관","재단":"재단법인(연구·장학·사학진흥·민간 공익재단) 운영","협회":"협의회·산업 협회 운영","기업":"기업이 제공하는 제휴·협약형"}[a]}
+function verNote(v){return{3:"2026-11-12 기준 공고 목록에서 제목과 접수기간을 확인했습니다.",2:"기관 사이트에서 사업이 진행 중임을 확인했으나 공고 세부는 확인하지 못했습니다.",1:"사이트로 확인하지 못하고 일반 지식에 근거해 정리했습니다. 최신 공고를 확인하세요."}[v]}
+function closeDetail(){drawer.hidden=true;scrim.hidden=true;if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+scrim.addEventListener("click",closeDetail);
+drawer.addEventListener("click",function(e){if(e.target.id==="dclose")closeDetail()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!drawer.hidden)closeDetail()});
+
+/* ───────── 일정(간트) ───────── */
+(function(){
+  var A0=ts("2026-10-12"),A1=ts("2027-01-04"),SPAN=A1-A0;
+  function pct(t){return Math.max(0,Math.min(100,(t-A0)/SPAN*100))}
+  var items=D.filter(function(p){return p.e}).sort(function(a,b){return ts(a.e)-ts(b.e)||a.id-b.id});
+  var ticks=["2026-11-01","2026-12-01","2027-01-01"].map(function(d){return '<span style="left:'+pct(ts(d))+'%">'+d.slice(5).replace("-","/")+'</span>'}).join("");
+  var tp=pct(TODAY);
+  var rows=items.map(function(p){
+    var c="c-"+ACLS[p.area],e=ts(p.e),s=p.s?ts(p.s):null,mark;
+    if(s!==null){mark='<span class="gbar '+c+'" style="left:'+pct(s)+'%;width:'+Math.max(0.6,pct(e)-pct(s))+'%"></span>'}
+    else{mark='<span class="gdot '+c+'" style="left:'+pct(e)+'%"></span>'}
+    return '<button type="button" class="grow" data-id="'+p.id+'" title="'+esc(p.n)+'"><span class="lb">'+badge(p.area)+'<span>'+esc(p.n)+'</span></span>'+
+      '<span class="gtrack">'+mark+(TODAY>=A0&&TODAY<=A1?'<span class="gtoday" style="left:'+tp+'%"></span>':'')+'</span></button>';
+  }).join("");
+  document.getElementById("gantt").innerHTML=
+    '<div class="gaxis"><div></div><div class="ticks">'+ticks+'</div></div>'+rows+
+    '<div class="gleg">'+AREAS.map(function(a){return '<span><i class="c-'+a.c+'"></i>'+a.k+'</span>'}).join("")+'<span><i style="background:var(--crit);width:2px;height:12px"></i>오늘 '+dot(TODAY)+'</span></div>';
+  document.getElementById("gantt").addEventListener("click",function(ev){var r=ev.target.closest(".grow");if(r)openDetail(+r.dataset.id,r)});
+})();
+
+/* ───────── 바로가기 ───────── */
+(function(){
+  var keys=["iris","nrf","moe","ks","g2b","hrd","kisa","kosaf","kcce","gbsa","kimpo"];
+  document.getElementById("links").innerHTML=keys.map(function(k){return '<a class="chip" style="text-decoration:none" href="'+L[k].u+'" target="_blank" rel="noopener noreferrer">'+esc(L[k].t)+'</a>'}).join("");
+})();
+
+/* ───────── 탭 ───────── */
+var TABS=["list","time","how","about"];
+function showTab(name){
+  if(TABS.indexOf(name)<0)name="list";
+  TABS.forEach(function(t){
+    var sel=t===name;
+    document.getElementById("t-"+t).setAttribute("aria-selected",sel?"true":"false");
+    document.getElementById("p-"+t).hidden=!sel;
+  });
+}
+document.getElementById("tabs").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-tab]");if(!b)return;
+  showTab(b.dataset.tab);
+  try{history.replaceState(null,"","#"+b.dataset.tab)}catch(_){}
+});
+window.addEventListener("hashchange",function(){showTab(location.hash.slice(1))});
+showTab(location.hash.slice(1)||"list");
+if(window.matchMedia&&window.matchMedia("(max-width:980px)").matches){document.getElementById("filters").open=false}
+})();
+</script>
+
+</body></html>
